@@ -1,12 +1,4 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import java.util.Properties
-
-val localProperties = Properties().apply {
-    val localPropertiesFile = rootProject.file("local.properties")
-    if (localPropertiesFile.exists()) {
-        load(localPropertiesFile.inputStream())
-    }
-}
 
 plugins {
     alias(libs.plugins.androidApplication)
@@ -38,19 +30,6 @@ android {
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 1
         versionName = "1.0"
-        buildConfigField(
-            "String",
-            "NEWS_API_KEY",
-            "\"${localProperties.getProperty("NEWS_API_KEY", "")}\""
-        )
-        buildConfigField(
-            "String",
-            "NEWS_API_BASE_URL",
-            "\"${localProperties.getProperty("NEWS_API_BASE_URL", "")}\""
-        )
-    }
-    buildFeatures {
-        buildConfig = true
     }
     packaging {
         resources {
