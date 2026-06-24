@@ -7,6 +7,7 @@ import com.tasneem.newsapp.data.exception.ServerException
 import com.tasneem.newsapp.data.exception.UnknownException
 import io.ktor.client.call.body
 import io.ktor.client.statement.HttpResponse
+import io.ktor.client.statement.bodyAsText
 import io.ktor.util.network.UnresolvedAddressException
 import okio.IOException
 

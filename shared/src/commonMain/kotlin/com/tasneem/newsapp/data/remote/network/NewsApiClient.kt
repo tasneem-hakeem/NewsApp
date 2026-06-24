@@ -11,6 +11,7 @@ import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.delete
 import io.ktor.client.request.get
+import io.ktor.client.request.header
 import io.ktor.client.request.patch
 import io.ktor.client.request.post
 import io.ktor.client.request.put
@@ -59,9 +60,7 @@ class NewsApiClient {
             defaultRequest {
                 url(baseUrl)
                 contentType(ContentType.Application.Json)
-                parameters {
-                    append("apiKey", apiKey)
-                }
+                header("x-api-key", apiKey)
             }
             install(ContentNegotiation) {
                 json(Json {
