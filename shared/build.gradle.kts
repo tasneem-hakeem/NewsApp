@@ -1,4 +1,3 @@
-import com.codingfeline.buildkonfig.compiler.FieldSpec.Type
 import com.codingfeline.buildkonfig.compiler.FieldSpec.Type.STRING
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import java.util.Properties
@@ -53,6 +52,8 @@ kotlin {
 
             //ktor
             implementation(libs.ktor.client.okhttp)
+
+            implementation(libs.androidx.room.sqlite.wrapper)
         }
         commonMain.dependencies {
             implementation(libs.compose.runtime)
