@@ -1,15 +1,19 @@
-package com.tasneem.newsapp.data.remote.mapper
+package com.tasneem.newsapp.data.mapper
 
 import com.tasneem.newsapp.data.remote.dto.ArticleDto
 import com.tasneem.newsapp.data.remote.dto.ArticleResponse
 import com.tasneem.newsapp.domain.model.Article
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 
+@OptIn(ExperimentalUuidApi::class)
 fun ArticleDto.toDomain() = Article(
-    title = title ?: "",
+    id = Uuid.random().toString(),
+    title = title,
     description = description ?: "",
-    sourceUrl = sourceUrl ?: "",
+    sourceUrl = sourceUrl,
     imageUrl = imageUrl ?: "",
-    publishedAt = publishedAt ?: "",
+    publishedAt = publishedAt,
     content = content ?: "",
     source = source?.name ?: "",
 )
