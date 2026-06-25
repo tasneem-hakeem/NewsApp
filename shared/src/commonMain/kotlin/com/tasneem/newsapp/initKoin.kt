@@ -1,6 +1,6 @@
 package com.tasneem.newsapp
 
-import com.tasneem.newsapp.di.dataModule
+import com.tasneem.newsapp.di.sharedModule
 import org.koin.core.context.startKoin
 import org.koin.dsl.KoinAppDeclaration
 
@@ -9,7 +9,7 @@ fun initKoin(config: KoinAppDeclaration? = null) {
         config?.invoke(this)
 
         modules(
-            modules = dataModule
+            modules = sharedModule
         )
     }
 }

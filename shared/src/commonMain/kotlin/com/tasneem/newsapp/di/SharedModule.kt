@@ -15,7 +15,7 @@ import kotlinx.coroutines.IO
 import org.koin.core.annotation.Single
 import org.koin.dsl.module
 
-internal val dataModule = module {
+internal val sharedModule = module {
 
     // remote
     single { NewsApiClient() }
@@ -31,6 +31,9 @@ internal val dataModule = module {
     }
     single { get<NewsDatabase>().getNewsDao() }
     single<NewsLocalDatasource> { NewsLocalDatasourceImpl(get()) }
+
+    // repository
+    single<NewsRepository> { NewsRepositoryImpl(get(), get()) }
 
 }
 
