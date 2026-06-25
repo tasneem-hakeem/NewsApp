@@ -10,7 +10,7 @@ import kotlin.uuid.Uuid
 
 @OptIn(ExperimentalUuidApi::class)
 fun ArticleEntity.toDomain() = Article(
-    id = Uuid.random().toString(),
+    id = id,
     title = title,
     description = description,
     sourceUrl = sourceUrl,
@@ -22,7 +22,7 @@ fun ArticleEntity.toDomain() = Article(
 
 @OptIn(ExperimentalUuidApi::class)
 fun Article.toEntity() = ArticleEntity(
-    id = Uuid.random().toString(),
+    id = id,
     title = title,
     description = description,
     sourceUrl = sourceUrl,
