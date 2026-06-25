@@ -25,8 +25,18 @@ class FavoritesViewModel(
 
     fun handleIntent(intent: FavoritesIntent) {
         when (intent) {
+            is FavoritesIntent.ShowDeleteConfirmation -> showDeleteConfirmation(intent.article)
+            is FavoritesIntent.DismissDeleteConfirmation -> dismissDeleteConfirmation()
             is FavoritesIntent.RemoveFromFavorites -> removeFavorite(intent.article)
         }
+    }
+
+    private fun showDeleteConfirmation(article: Article) {
+        _uiState.update { it.copy(articlePendingDeletion = article) }
+    }
+
+    private fun dismissDeleteConfirmation() {
+        _uiState.update { it.copy(articlePendingDeletion = null) }
     }
 
     private fun observeFavorites() {
@@ -40,6 +50,7 @@ class FavoritesViewModel(
     private fun removeFavorite(article: Article) {
         viewModelScope.launch {
             removeFromFavoritesUseCase(article)
+            dismissDeleteConfirmation()
         }
     }
 }

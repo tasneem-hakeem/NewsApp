@@ -13,7 +13,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.tasneem.newsapp.presentation.components.ArticleCard
 import com.tasneem.newsapp.presentation.screen.theme.AppColors
@@ -44,6 +46,14 @@ fun NewsScreen(
                 modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
+                item {
+                    Text(
+                        modifier = Modifier.padding(8.dp),
+                        text = "Breaking News",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 24.sp
+                    )
+                }
                 items(state.articles, key = { it.id }) { article ->
                     val isFavorite = state.favoriteArticleIds.contains(article.id)
                     ArticleCard(

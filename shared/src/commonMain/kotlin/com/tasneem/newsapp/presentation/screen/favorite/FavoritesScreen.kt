@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.tasneem.newsapp.presentation.components.ArticleCard
+import com.tasneem.newsapp.presentation.components.DeleteConfirmationDialog
 import com.tasneem.newsapp.presentation.screen.theme.AppColors
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -46,11 +47,24 @@ fun FavoritesScreen(
                         article = article,
                         isFavorite = true,
                         onFavoriteClick = {
-                            viewModel.handleIntent(FavoritesIntent.RemoveFromFavorites(article))
+                            viewModel.handleIntent(FavoritesIntent.ShowDeleteConfirmation(article))
                         }
                     )
                 }
             }
         }
+    }
+
+    state.articlePendingDeletion?.let { article ->
+        DeleteConfirmationDialog(
+            onConfirm = {
+                viewModel.handleIntent(FavoritesIntent.RemoveFromFavorites(article))
+            },
+            onDismiss = {
+                viewModel.handleIntent(FavoritesIntent.DismissDeleteConfirmation)
+            },
+            title = "Delete this item?",
+            subtitle = "Are you sure you want to delete this element?\nThis action is final."
+        )
     }
 }
