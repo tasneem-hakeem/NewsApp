@@ -10,9 +10,14 @@ import com.tasneem.newsapp.data.remote.datasource.NewsRemoteDatasourceImpl
 import com.tasneem.newsapp.data.remote.network.NewsApiClient
 import com.tasneem.newsapp.data.remote.repository.NewsRepositoryImpl
 import com.tasneem.newsapp.domain.repository.NewsRepository
+import com.tasneem.newsapp.domain.usecase.AddToFavoritesUseCase
+import com.tasneem.newsapp.domain.usecase.GetFavoriteArticlesUseCase
+import com.tasneem.newsapp.domain.usecase.GetTopHeadlinesUseCase
+import com.tasneem.newsapp.domain.usecase.RemoveFromFavoritesUseCase
+import com.tasneem.newsapp.presentation.screen.favorite.FavoritesViewModel
+import com.tasneem.newsapp.presentation.screen.news.NewsViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
-import org.koin.core.annotation.Single
 import org.koin.dsl.module
 
 internal val sharedModule = module {
@@ -21,19 +26,29 @@ internal val sharedModule = module {
     single { NewsApiClient() }
     single<NewsRemoteDatasource> { NewsRemoteDatasourceImpl(get()) }
 
-    // local
-    @Single
-    fun provideDatabase(builder: NewsDatabaseBuilder): NewsDatabase {
-        return builder.getBuilder()
+    single { NewsDatabaseBuilder() }
+
+    single {
+        get<NewsDatabaseBuilder>().getBuilder()
             .setDriver(BundledSQLiteDriver())
             .setQueryCoroutineContext(Dispatchers.IO)
             .build()
     }
+
     single { get<NewsDatabase>().getNewsDao() }
     single<NewsLocalDatasource> { NewsLocalDatasourceImpl(get()) }
 
     // repository
     single<NewsRepository> { NewsRepositoryImpl(get(), get()) }
 
+    // use case
+    single { GetTopHeadlinesUseCase(get()) }
+    single { GetFavoriteArticlesUseCase(get()) }
+    single { AddToFavoritesUseCase(get()) }
+    single { RemoveFromFavoritesUseCase(get()) }
+
+    // view model
+    factory { NewsViewModel(get(), get(), get(), get()) }
+    factory { FavoritesViewModel(get(), get()) }
 }
 

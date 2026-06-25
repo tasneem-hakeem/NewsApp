@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 class GetFavoriteArticlesUseCase(
     private val repository: NewsRepository
 ) {
-    suspend operator fun invoke(): Flow<List<Article>> {
+    operator fun invoke(): Flow<List<Article>> {
         return repository.getFavoriteArticles()
     }
 }

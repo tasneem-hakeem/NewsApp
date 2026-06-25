@@ -1,4 +1,4 @@
-package com.tasneem.newsapp.presentation.screen.favorite
+package com.tasneem.newsapp.presentation.screen.news
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -19,8 +20,8 @@ import com.tasneem.newsapp.presentation.screen.theme.AppColors
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
-fun FavoritesScreen(
-    viewModel: FavoritesViewModel = koinViewModel()
+fun NewsScreen(
+    viewModel: NewsViewModel = koinViewModel()
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -30,24 +31,25 @@ fun FavoritesScreen(
             .padding(16.dp),
         contentAlignment = Alignment.Center
     ) {
-        if (state.favoriteArticles.isEmpty()) {
-            Text(
-                text = "No favorite articles found.",
-                style = MaterialTheme.typography.bodyLarge,
-                color = AppColors.hint
-            )
-        } else {
+        if (state.isLoading) {
+            CircularProgressIndicator(color = AppColors.primary)
+        }
+
+        state.errorMessage?.let { error ->
+            Text(text = error, color = MaterialTheme.colorScheme.error)
+        }
+
+        if (!state.isLoading && state.errorMessage == null) {
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                items(state.favoriteArticles, key = { it.id }) { article ->
+                items(state.articles, key = { it.id }) { article ->
+                    val isFavorite = state.favoriteArticleIds.contains(article.id)
                     ArticleCard(
                         article = article,
-                        isFavorite = true,
-                        onFavoriteClick = {
-                            viewModel.handleIntent(FavoritesIntent.RemoveFromFavorites(article))
-                        }
+                        isFavorite = isFavorite,
+                        onFavoriteClick = { viewModel.handleIntent(NewsIntent.ToggleFavorite(article)) }
                     )
                 }
             }
